@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tra cứu đáp án Hoá hữu cơ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --canh: #d98a00;
+    --canh-nen: #fff3d6;
+    --nen: #eef2f6;
+    --the: #ffffff;
+    --muc: #14213d;
+    --muc-nhat: #55627a;
+    --vien: #d5dde8;
+    --nhan: #0f8b6d;
+    --nhan-nen: #e3f5ee;
+    --sai: #c2412d;
+    --sai-nen: #fbe9e5;
+    --danhdau: #ffe45c;
+    --bong: 0 1px 0 rgba(20,33,61,.04);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --canh: #f0b247;
+      --canh-nen: #3a2d0e;
+      --nen: #0e1524;
+      --the: #172036;
+      --muc: #e8edf7;
+      --muc-nhat: #9aa8c2;
+      --vien: #2a3654;
+      --nhan: #4fd1a8;
+      --nhan-nen: #12362f;
+      --sai: #ff8a74;
+      --sai-nen: #3a1f1b;
+      --danhdau: #8a7a12;
+      color-scheme: dark;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: 150px; }
+  body {
+    margin: 0;
+    background: var(--nen);
+    color: var(--muc);
+    font-family: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.55;
+  }
+  sub { font-size: .72em; line-height: 0; }
+
+  /* ----- Thanh tìm kiếm cố định ----- */
+  .dau {
+    position: sticky; top: 0; z-index: 5;
+    background: var(--nen);
+    border-bottom: 1px solid var(--vien);
+    padding: 18px 16px 12px;
+  }
+  .dau-trong { max-width: 820px; margin: 0 auto; }
+  h1 { margin: 0 0 10px; font-size: 1.05rem; font-weight: 600; letter-spacing: .01em; }
+
+  .o-tim {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--the);
+    border: 2px solid var(--muc);
+    border-radius: 10px;
+    padding: 4px 6px 4px 14px;
+  }
+  .o-tim:focus-within { outline: 3px solid var(--nhan); outline-offset: 2px; }
+  #timkiem {
+    flex: 1; min-width: 0;
+    border: 0; background: transparent; color: inherit;
+    font: 500 1.35rem/1.2 inherit; padding: 10px 0;
+  }
+  #timkiem:focus { outline: none; }
+  #timkiem::placeholder { color: var(--muc-nhat); font-weight: 400; }
+  #xoa {
+    border: 0; background: transparent; color: var(--muc-nhat);
+    font: inherit; font-size: .85rem; padding: 8px 10px; cursor: pointer; border-radius: 6px;
+  }
+  #xoa:hover { background: var(--nen); color: var(--muc); }
+
+  .dieu-khien { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 10px; font-size: .85rem; }
+  .nhom { display: inline-flex; border: 1px solid var(--vien); border-radius: 8px; overflow: hidden; background: var(--the); }
+  .nhom button {
+    border: 0; background: transparent; color: var(--muc-nhat);
+    font: inherit; padding: 6px 12px; cursor: pointer;
+  }
+  .nhom button + button { border-left: 1px solid var(--vien); }
+  .nhom button[aria-pressed="true"] { background: var(--muc); color: var(--nen); font-weight: 600; }
+  .nhom button:focus-visible { outline: 3px solid var(--nhan); outline-offset: -3px; }
+  label.tuychon { display: inline-flex; align-items: center; gap: 6px; color: var(--muc-nhat); cursor: pointer; }
+  #dem { margin-left: auto; font-weight: 600; color: var(--muc); }
+
+  /* ----- Danh sách ----- */
+  main { max-width: 820px; margin: 0 auto; padding: 16px 16px 80px; }
+
+  .the {
+    background: var(--the);
+    border: 1px solid var(--vien);
+    border-radius: 10px;
+    padding: 14px 16px 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--bong);
+    transition: opacity .15s;
+  }
+  .the.mo { opacity: .32; }
+  .the.mo:hover { opacity: .8; }
+
+  .the-dau { font-size: .78rem; color: var(--muc-nhat); margin-bottom: 6px; }
+  .nhan { font-weight: 600; color: var(--muc); }
+  .ma { font-variant-numeric: tabular-nums; }
+
+  .cau { margin: 0 0 10px; font-size: 1.02rem; font-weight: 500; }
+  mark { background: var(--danhdau); color: inherit; border-radius: 3px; padding: 0 1px; }
+
+  .luachon { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .luachon li {
+    display: flex; gap: 10px; align-items: baseline;
+    padding: 7px 10px; border: 1px solid var(--vien); border-radius: 8px;
+  }
+  .luachon .chu { min-width: 1.6em; font-weight: 700; }
+  .luachon li > span { flex: 1; }
+  .luachon li.dung { background: var(--nhan-nen); border-color: var(--nhan); }
+  .luachon li.dung .chu { color: var(--nhan); }
+  .tick { font-style: normal; font-size: .75rem; font-weight: 600; color: var(--nhan); white-space: nowrap; }
+
+  .ds { font-style: normal; font-size: .78rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+  .ds.d { background: var(--nhan-nen); color: var(--nhan); border: 1px solid var(--nhan); }
+  .ds.s { background: var(--sai-nen); color: var(--sai); border: 1px solid var(--sai); }
+
+  .ngan { display: flex; align-items: baseline; gap: 12px; margin: 0; padding: 8px 12px; background: var(--nhan-nen); border: 1px solid var(--nhan); border-radius: 8px; }
+  .ngan span { font-size: .8rem; color: var(--muc-nhat); }
+  .ngan strong { font-size: 1.1rem; font-weight: 600; color: var(--nhan); }
+
+  .btag { font-style: normal; font-size: .78rem; font-weight: 600; margin-left: auto; padding: 2px 9px; border-radius: 999px; background: var(--sai-nen); color: var(--sai); border: 1px solid var(--sai); }
+
+  /* câu dễ nhầm: viền cam */
+  .the.nham { border-color: var(--canh); border-left-width: 6px; }
+  .nham-hop { margin: 0 0 10px; padding: 8px 12px; background: var(--canh-nen); border: 1px solid var(--canh); border-radius: 8px; font-size: .85rem; }
+  .nham-hop b { display: block; margin-bottom: 2px; color: var(--canh); }
+  .nham-hop div + div { margin-top: 2px; }
+
+  /* đáp án sai đang tìm */
+  .ngan.sai { background: var(--sai-nen); border-color: var(--sai); margin-bottom: 6px; }
+  .ngan.sai strong { color: var(--sai); }
+  .luachon li.nho { opacity: .45; }
+  .luachon li.tim { border-color: var(--muc); }
+  .ghichu { margin: 10px 0 0; padding-left: 10px; border-left: 3px solid var(--vien); font-size: .85rem; color: var(--muc-nhat); }
+
+  .ngan-cach { margin: 22px 0 12px; font-size: .8rem; color: var(--muc-nhat); display: flex; align-items: center; gap: 12px; }
+  .ngan-cach::after { content: ""; flex: 1; height: 1px; background: var(--vien); }
+  .trong { padding: 18px; border: 1px dashed var(--vien); border-radius: 10px; color: var(--muc-nhat); }
+
+  @media (max-width: 520px) {
+    #timkiem { font-size: 1.15rem; }
+    #dem { margin-left: 0; width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) { .the { transition: none; } }
+</style>
+</head>
+<body>
+
+<div class="dau">
+  <div class="dau-trong">
+    <h1>Tra cứu câu hỏi &amp; đáp án</h1>
+
+    <div class="o-tim">
+      <input id="timkiem" type="search" autocomplete="off" spellcheck="false" autofocus
+             placeholder="Gõ chữ cái đầu của câu hỏi…" aria-label="Tìm câu hỏi">
+      <button id="xoa" type="button">Xoá</button>
+    </div>
+
+    <div class="dieu-khien">
+      <div class="nhom" role="group" aria-label="Tìm trong">
+        <button type="button" data-muc="q" aria-pressed="true">Tìm câu hỏi</button>
+        <button type="button" data-muc="a" aria-pressed="false">Tìm đáp án</button>
+      </div>
+      <div class="nhom" role="group" aria-label="Cách dò">
+        <button type="button" data-che-do="start" aria-pressed="true">Từ đầu</button>
+        <button type="button" data-che-do="any" aria-pressed="false">Chứa chuỗi</button>
+      </div>
+      <div class="nhom" role="group" aria-label="Lọc theo phần">
+        <button type="button" data-phan="0" aria-pressed="true">Tất cả</button>
+        <button type="button" data-phan="1" aria-pressed="false">I</button>
+        <button type="button" data-phan="2" aria-pressed="false">II</button>
+        <button type="button" data-phan="3" aria-pressed="false">III</button>
+      </div>
+      <label class="tuychon"><input type="checkbox" id="boqua-dau" checked> Gõ không dấu</label>
+      <label class="tuychon"><input type="checkbox" id="hien-dapan" checked> Hiện đáp án</label>
+      <span id="dem" aria-live="polite"></span>
+    </div>
+  </div>
+</div>
+
+<main id="ketqua"></main>
+
+<!-- Thứ tự nạp: ngân hàng trước, script sau -->
+<script src="nganhang.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
